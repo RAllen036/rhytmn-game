@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4adprsr4befe"]
+
+[ext_resource type="Script" path="res://Scripts/Test.gd" id="1_hfbk2"]
+[ext_resource type="PackedScene" uid="uid://b3xb4eno3phuk" path="res://Scenes/count_down.tscn" id="2_nhbg1"]
+
+[node name="Test" type="Node2D"]
+script = ExtResource("1_hfbk2")
+
+[node name="CountDown" parent="." instance=ExtResource("2_nhbg1")]
+
+[node name="ClickObjects" type="Node" parent="."]
+
+[connection signal="completed" from="CountDown" to="." method="_on_count_down_completed"]

@@ -1,0 +1,97 @@
+[gd_scene load_steps=13 format=3 uid="uid://bo0memyne7a5v"]
+
+[ext_resource type="Script" path="res://Scripts/TimeClickChallenge.gd" id="1_6vpad"]
+[ext_resource type="PackedScene" uid="uid://b3xb4eno3phuk" path="res://Scenes/count_down.tscn" id="2_1lj16"]
+[ext_resource type="Texture2D" uid="uid://dryqmpd00c5t8" path="res://box.png" id="2_cfj03"]
+
+[sub_resource type="Curve2D" id="Curve2D_dyan1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 192, 128, 0, 0, 0, 0, 832, 320, 0, 0, 0, 0, 192, 128)
+}
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6nxhr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bgw1x"]
+atlas = ExtResource("2_cfj03")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bk3kf"]
+atlas = ExtResource("2_cfj03")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4efx"]
+atlas = ExtResource("2_cfj03")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55g8j"]
+atlas = ExtResource("2_cfj03")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b5hgd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bgw1x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bk3kf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q4efx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_55g8j")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o1k2u"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_rjyaj"]
+
+[node name="TimeClickChallenge" type="Node2D"]
+script = ExtResource("1_6vpad")
+
+[node name="Path" type="Path2D" parent="."]
+curve = SubResource("Curve2D_dyan1")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path"]
+position = Vector2(192, 128)
+rotation = -2.85014
+rotates = false
+
+[node name="VisualTimer" type="Area2D" parent="Path/PathFollow2D"]
+
+[node name="CollisionArea" type="CollisionShape2D" parent="Path/PathFollow2D/VisualTimer"]
+shape = SubResource("RectangleShape2D_6nxhr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Path/PathFollow2D/VisualTimer"]
+position = Vector2(-0.0628006, 0.0896875)
+scale = Vector2(1.25227, 1.22648)
+sprite_frames = SubResource("SpriteFrames_b5hgd")
+autoplay = "default"
+
+[node name="PathFollow2D2" type="PathFollow2D" parent="Path"]
+position = Vector2(576.001, 243.2)
+rotation = 0.291457
+progress = 400.908
+
+[node name="Hit" type="StaticBody2D" parent="Path/PathFollow2D2"]
+rotation = 3.14159
+scale = Vector2(0.5, 5)
+
+[node name="HitBox" type="CollisionShape2D" parent="Path/PathFollow2D2/Hit"]
+shape = SubResource("RectangleShape2D_o1k2u")
+
+[node name="HitMesh" type="MeshInstance2D" parent="Path/PathFollow2D2/Hit"]
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_rjyaj")
+
+[node name="CountDown" parent="." instance=ExtResource("2_1lj16")]
+
+[connection signal="body_entered" from="Path/PathFollow2D/VisualTimer" to="." method="_on_visual_timer_body_entered"]
+[connection signal="body_exited" from="Path/PathFollow2D/VisualTimer" to="." method="_on_visual_timer_body_exited"]
+[connection signal="completed" from="CountDown" to="." method="_on_count_down_completed"]

@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://dro3ifhxdgae7"]
+
+[ext_resource type="Script" path="res://Scripts/round_click.gd" id="1_3h1wl"]
+[ext_resource type="PackedScene" uid="uid://b3xb4eno3phuk" path="res://Scenes/count_down.tscn" id="2_btkvq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lai6g"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_carms"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5a5mm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_uykyw"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v7ks7"]
+
+[node name="RoundClick" type="Node2D"]
+script = ExtResource("1_3h1wl")
+
+[node name="Goal" type="StaticBody2D" parent="." groups=["goal"]]
+position = Vector2(576, 256)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Goal"]
+shape = SubResource("RectangleShape2D_lai6g")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Goal"]
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_carms")
+
+[node name="Central" type="Marker2D" parent="."]
+position = Vector2(576, 256)
+
+[node name="Player" type="Area2D" parent="Central"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Central/Player"]
+shape = SubResource("RectangleShape2D_5a5mm")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Central/Player"]
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_uykyw")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Central"]
+scale = Vector2(10, 10)
+mesh = SubResource("BoxMesh_v7ks7")
+
+[node name="CountDown" parent="." instance=ExtResource("2_btkvq")]
+visible = false
+
+[connection signal="body_entered" from="Central/Player" to="." method="_on_player_body_entered"]
+[connection signal="body_exited" from="Central/Player" to="." method="_on_player_body_exited"]
+[connection signal="completed" from="CountDown" to="." method="_on_count_down_completed"]

@@ -1,0 +1,11 @@
+[gd_resource type="Shader" format=3 uid="uid://c82jhcmlbys64"]
+
+[resource]
+code = "shader_type canvas_item;
+
+void fragment() {
+	vec4 pixel_colour = texture(TEXTURE, UV);
+	float brightness = (pixel_colour.r + pixel_colour.g + pixel_colour.b) / 3.0;
+	vec4 gray_scale = vec4(brightness, brightness, brightness, pixel_colour.a);
+	COLOR = gray_scale;
+}"

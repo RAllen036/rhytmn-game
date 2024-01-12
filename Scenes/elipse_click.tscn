@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://duk6c103i8xxy"]
+
+[ext_resource type="Script" path="res://Scripts/elipse_click.gd" id="1_xjoft"]
+[ext_resource type="PackedScene" uid="uid://b3xb4eno3phuk" path="res://Scenes/count_down.tscn" id="2_rg6hw"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_sl0uc"]
+
+[sub_resource type="Curve2D" id="Curve2D_e31xx"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 352, 0)
+}
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_132x3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_aakgr"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7nsok"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qs6dy"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3q3el"]
+
+[node name="ElipseClick" type="Node2D"]
+position = Vector2(352, 232)
+script = ExtResource("1_xjoft")
+
+[node name="CountDown" parent="." instance=ExtResource("2_rg6hw")]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(176, -1.52588e-05)
+scale = Vector2(352, 200)
+mesh = SubResource("SphereMesh_sl0uc")
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_e31xx")
+
+[node name="PlayerPath" type="PathFollow2D" parent="Path2D"]
+rotates = false
+loop = false
+
+[node name="Anchor" type="Marker2D" parent="Path2D/PlayerPath"]
+
+[node name="Player" type="Area2D" parent="Path2D/PlayerPath/Anchor" groups=["goal"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PlayerPath/Anchor/Player"]
+shape = SubResource("RectangleShape2D_132x3")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Path2D/PlayerPath/Anchor/Player"]
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_aakgr")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Path2D/PlayerPath/Anchor"]
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(10, 10)
+mesh = SubResource("BoxMesh_7nsok")
+
+[node name="GoalPath" type="PathFollow2D" parent="Path2D"]
+position = Vector2(352, 0)
+progress = 352.0
+
+[node name="GoalBody" type="StaticBody2D" parent="Path2D/GoalPath" groups=["goal"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/GoalPath/GoalBody"]
+shape = SubResource("RectangleShape2D_qs6dy")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Path2D/GoalPath/GoalBody"]
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_3q3el")
+
+[connection signal="completed" from="CountDown" to="." method="_on_count_down_completed"]
+[connection signal="body_entered" from="Path2D/PlayerPath/Anchor/Player" to="." method="_on_player_body_entered"]
+[connection signal="body_exited" from="Path2D/PlayerPath/Anchor/Player" to="." method="_on_player_body_exited"]

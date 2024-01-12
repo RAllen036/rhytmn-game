@@ -1,0 +1,109 @@
+[gd_scene load_steps=18 format=3 uid="uid://mjn8msvte4mp"]
+
+[ext_resource type="Shader" path="res://Scenes/multi_click.gdshader" id="1_bgafa"]
+[ext_resource type="Script" path="res://Scripts/TimeClickChallenge.gd" id="1_trmv8"]
+[ext_resource type="Texture2D" uid="uid://dryqmpd00c5t8" path="res://box.png" id="2_g57db"]
+[ext_resource type="Texture2D" uid="uid://b5fecy4sec4uo" path="res://grey.png" id="3_auwhb"]
+[ext_resource type="Texture2D" uid="uid://dm8463qfjq3qc" path="res://grad_text.tres" id="4_ryrll"]
+[ext_resource type="Texture2D" uid="uid://cp4au87mxki10" path="res://IDK.png" id="6_jwtkk"]
+[ext_resource type="Shader" uid="uid://c82jhcmlbys64" path="res://Scenes/gray_scale.tres" id="6_n27j4"]
+
+[sub_resource type="Curve2D" id="Curve2D_dyan1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 192, 128, 0, 0, 0, 0, 192, 128, 0, 0, 0, 0, 576, 512)
+}
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6nxhr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bgw1x"]
+atlas = ExtResource("2_g57db")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bk3kf"]
+atlas = ExtResource("2_g57db")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4efx"]
+atlas = ExtResource("2_g57db")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55g8j"]
+atlas = ExtResource("2_g57db")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b5hgd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bgw1x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bk3kf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q4efx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_55g8j")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o1k2u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3mm06"]
+shader = ExtResource("1_bgafa")
+shader_parameter/mix_amount = 1.0
+shader_parameter/gradient = ExtResource("4_ryrll")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hbp4q"]
+shader = ExtResource("6_n27j4")
+
+[node name="TimeClickChallenge" type="Node2D"]
+script = ExtResource("1_trmv8")
+
+[node name="Path" type="Path2D" parent="."]
+position = Vector2(-160, -96)
+curve = SubResource("Curve2D_dyan1")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path"]
+position = Vector2(191.931, 127.931)
+
+[node name="VisualTimer" type="Area2D" parent="Path/PathFollow2D"]
+
+[node name="CollisionArea" type="CollisionShape2D" parent="Path/PathFollow2D/VisualTimer"]
+shape = SubResource("RectangleShape2D_6nxhr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Path/PathFollow2D/VisualTimer"]
+position = Vector2(-0.0628006, 0.0896875)
+scale = Vector2(1.25227, 1.22648)
+sprite_frames = SubResource("SpriteFrames_b5hgd")
+autoplay = "default"
+
+[node name="PathFollow2D2" type="PathFollow2D" parent="Path"]
+position = Vector2(475.486, 411.486)
+rotation = 0.785398
+progress = 400.908
+
+[node name="Hit" type="StaticBody2D" parent="Path/PathFollow2D2"]
+rotation = 3.14159
+scale = Vector2(0.5, 5)
+
+[node name="HitBox" type="CollisionShape2D" parent="Path/PathFollow2D2/Hit"]
+shape = SubResource("RectangleShape2D_o1k2u")
+
+[node name="Sprite2D" type="Sprite2D" parent="Path/PathFollow2D2/Hit"]
+material = SubResource("ShaderMaterial_3mm06")
+scale = Vector2(0.299104, 0.310395)
+texture = ExtResource("3_auwhb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_hbp4q")
+position = Vector2(252.423, 128.248)
+texture = ExtResource("6_jwtkk")
+
+[connection signal="body_entered" from="Path/PathFollow2D/VisualTimer" to="." method="_on_visual_timer_body_entered"]
+[connection signal="body_exited" from="Path/PathFollow2D/VisualTimer" to="." method="_on_visual_timer_body_exited"]

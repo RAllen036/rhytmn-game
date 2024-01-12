@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3xb4eno3phuk"]
+
+[ext_resource type="Script" path="res://Scripts/count_down.gd" id="1_d50pk"]
+
+[node name="CountDown" type="CanvasLayer"]
+script = ExtResource("1_d50pk")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="CountDownDisplay" type="PopupPanel" parent="."]
+transparent_bg = true
+initial_position = 1
+size = Vector2i(100, 148)
+
+[node name="Label" type="Label" parent="CountDownDisplay"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 144.0
+theme_override_font_sizes/font_size = 100
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

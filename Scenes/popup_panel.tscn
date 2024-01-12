@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cj4em7e8j3t4m"]
+
+[node name="PopupPanel" type="PopupPanel"]
+size = Vector2i(500, 500)
+visible = true
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
